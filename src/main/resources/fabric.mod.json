@@ -1,37 +1,45 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "rwby",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Trash RWBY Weapons Until I Learn Java",
+	"description": "Learning project mod by helium.",
 	"authors": [
-		"Me!"
+		"helium"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/rwby/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"com.helium.RwbyMod"
+		],
+		"cardinal-components-entity": [
+			"com.helium.aura.AuraEntityComponentInitializer"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"com.helium.RwbyModClient"
+		]
+	},
+	"custom": {
+		"cardinal-components": [
+			"rwby:player_aura"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"rwby.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "rwby.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.18.2",
-		"minecraft": "~1.21.11",
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.1",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

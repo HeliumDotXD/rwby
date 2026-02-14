@@ -3,7 +3,27 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+def requestedTasks = gradle.startParameter.taskNames
+def isBuildInvocation = requestedTasks.any { it == "build" || it.endsWith(":build") }
+def propertiesFile = file("gradle.properties")
+def propertiesContent = propertiesFile.getText("UTF-8")
+def versionMatcher = (propertiesContent =~ /(?m)^mod_version=(\d+)\.(\d+)\.(\d+)$/)
+if (!versionMatcher.find()) {
+	throw new GradleException("Could not find mod_version=x.y.z in gradle.properties")
+}
+
+def resolvedVersion = "${versionMatcher.group(1)}.${versionMatcher.group(2)}.${versionMatcher.group(3)}"
+if (isBuildInvocation) {
+	int major = versionMatcher.group(1) as int
+	int minor = versionMatcher.group(2) as int
+	int patch = versionMatcher.group(3) as int
+	resolvedVersion = "${major}.${minor}.${patch + 1}"
+	String updated = propertiesContent.replaceFirst(/(?m)^mod_version=\d+\.\d+\.\d+$/, "mod_version=${resolvedVersion}")
+	propertiesFile.write(updated, "UTF-8")
+	logger.lifecycle("Bumped mod_version to ${resolvedVersion}")
+}
+
+version = resolvedVersion
 group = project.maven_group
 
 base {
@@ -11,18 +31,14 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	maven { url "https://maven.ladysnake.org/releases" }
 }
 
 loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"rwby" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -38,6 +54,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "org.ladysnake:satin:${project.satin_version}"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
 	
 }
 
@@ -87,4 +106,19 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+
+def modrinthModsDir = "/Users/johann/Library/Application Support/ModrinthApp/profiles/Testing/mods"
+
+tasks.register("deployToTestingMods", Copy) {
+	dependsOn(tasks.named("remapJar"))
+	from(tasks.named("remapJar").flatMap { it.archiveFile })
+	into(file(modrinthModsDir))
+	doFirst {
+		file(modrinthModsDir).mkdirs()
+	}
+}
+
+tasks.named("build") {
+	finalizedBy(tasks.named("deployToTestingMods"))
 }

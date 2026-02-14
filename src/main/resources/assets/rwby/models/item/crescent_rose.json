@@ -1,0 +1,28 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "rwby:item/crescent_rose"
+	},
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [-60, 270, 0],
+			"translation": [1.0, 3.0, 1.0],
+			"scale": [2.0, 2.0, 2.0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-60, 270, 0],
+			"translation": [1.0, 3.0, 1.0],
+			"scale": [2.0, 2.0, 2.0]
+		},
+		"thirdperson_righthand": {
+			"rotation": [-70, -90, -25],
+			"translation": [0.0, 5.0, 0.0],
+			"scale": [3.0, 3.0, 3.0]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-70, 90, 25],
+			"translation": [0.0, 5.0, 0.0],
+			"scale": [3.0, 3.0, 3.0]
+		}
+	}
+}

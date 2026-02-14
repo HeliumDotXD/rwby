@@ -1,0 +1,35 @@
+{
+	"anvil_cost": 4,
+	"description": {
+		"translate": "enchantment.rwby.air_lift"
+	},
+	"effects": {
+		"minecraft:damage": [
+			{
+				"effect": {
+					"type": "minecraft:add",
+					"value": {
+						"type": "minecraft:linear",
+						"base": 0.0,
+						"per_level_above_first": 0.0
+					}
+				}
+			}
+		]
+	},
+	"max_cost": {
+		"base": 45,
+		"per_level_above_first": 10
+	},
+	"max_level": 5,
+	"min_cost": {
+		"base": 10,
+		"per_level_above_first": 10
+	},
+	"primary_items": "#rwby:enchantable/crescent_rose",
+	"slots": [
+		"mainhand"
+	],
+	"supported_items": "#rwby:enchantable/crescent_rose",
+	"weight": 3
+}
